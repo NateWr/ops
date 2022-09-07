@@ -16,6 +16,8 @@
 namespace APP\pages\management;
 
 use APP\template\TemplateManager;
+use PKP\components\forms\context\PKPInformationForm;
+use PKP\context\Context;
 use PKP\core\PKPApplication;
 use PKP\pages\management\ManagementHandler;
 use PKP\plugins\Hook;
@@ -104,5 +106,10 @@ class SettingsHandler extends ManagementHandler
         $templateMgr->setState(['components' => $components]);
 
         $templateMgr->display('management/distribution.tpl');
+    }
+
+    protected function getInformationForm(string $contextApiUrl, array $locales, Context $context, string $publicFileApiUrl): ?PKPInformationForm
+    {
+        return null;
     }
 }
