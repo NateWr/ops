@@ -48,9 +48,6 @@ msgstr ""
 "English=en; French=fr; Spanish=es. <a href=\"http://www.loc.gov/standards/"
 "iso639-2/php/code_list.php\" target=\"_blank\">Zusatzcodes</a>."
 
-msgid "author.submit.form.sectionRequired"
-msgstr "Bitte wählen Sie einen geeigneten Serverabschnitt für diesen Beitrag."
-
 msgid "submission.submit.coverNote"
 msgstr "Kommentare für den Moderator"
 
@@ -64,16 +61,8 @@ msgstr "Server-Abschnitt"
 msgid "author.submit.notAccepting"
 msgstr "Dieser Server nimmt zur Zeit keine Einreichungen an."
 
-msgid "submission.submit.cancelSubmission"
-msgstr ""
-"Sie können diese Einreichung zu einem späteren Zeitpunkt abschließen, indem "
-"Sie auf der Autoren-Homepage \"Aktive Einreichungen\" auswählen."
-
 msgid "author.submit.nextSteps"
 msgstr "Nächste Schritte"
-
-msgid "author.submit.confirmation"
-msgstr "Bestätigung"
 
 msgid "author.submit.metadata"
 msgstr "Metadaten eintragen"

@@ -13,20 +13,21 @@
 
 namespace APP\publication;
 
-use Illuminate\Support\Facades\App;
 use APP\core\Application;
 use APP\facades\Repo;
 use APP\mail\PreprintMailTemplate;
 use APP\notification\Notification;
 use APP\notification\NotificationManager;
 use APP\submission\Submission;
+use Illuminate\Support\Facades\App;
 use PKP\core\Core;
+use PKP\core\PKPString;
 use PKP\db\DAORegistry;
 use PKP\plugins\Hook;
 use PKP\plugins\PluginRegistry;
+use PKP\publication\Collector;
 use PKP\security\Role;
 use PKP\stageAssignment\StageAssignmentDAO;
-use PKP\publication\Collector;
 
 class Repository extends \PKP\publication\Repository
 {
@@ -39,9 +40,9 @@ class Repository extends \PKP\publication\Repository
     }
 
     /** @copydoc PKP\publication\Repository::validate() */
-    public function validate($publication, array $props, array $allowedLocales, string $primaryLocale): array
+    public function validate($publication, array $props, Submission $submission, array $allowedLocales, string $primaryLocale): array
     {
-        $errors = parent::validate($publication, $props, $allowedLocales, $primaryLocale);
+        $errors = parent::validate($publication, $props, $submission, $allowedLocales, $primaryLocale);
 
         $sectionDao = Application::get()->getSectionDAO(); /** @var SectionDAO $sectionDao */
 
@@ -59,7 +60,8 @@ class Repository extends \PKP\publication\Repository
             $section = $sectionDao->getById($publication->getData('sectionId'));
         }
 
-        if ($section) {
+        // Only validate section settings for completed submissions
+        if ($section && !$submission->getData('submissionProgress')) {
 
             // Require abstracts if the section requires them
             if (is_null($publication) && !$section->getData('abstractsNotRequired') && empty($props['abstract'])) {
@@ -83,7 +85,7 @@ class Repository extends \PKP\publication\Repository
                     if (empty($props['abstract'][$localeKey])) {
                         continue;
                     }
-                    $wordCount = count(preg_split('/\s+/', trim(str_replace('&nbsp;', ' ', strip_tags($props['abstract'][$localeKey])))));
+                    $wordCount = PKPString::getWordCount($props['abstract'][$localeKey]);
                     $wordCountLimit = $section->getData('wordCount');
                     if ($wordCountLimit && $wordCount > $wordCountLimit) {
                         if (!isset($errors['abstract'])) {
@@ -256,7 +258,7 @@ class Repository extends \PKP\publication\Repository
         $isAuthor = false;
         $currentUser = $this->request->getUser();
         $stageAssignmentDao = DAORegistry::getDAO('StageAssignmentDAO'); /** @var StageAssignmentDAO $stageAssignmentDao */
-        $submitterAssignments = $stageAssignmentDao->getBySubmissionAndRoleId($submissionId, Role::ROLE_ID_AUTHOR);
+        $submitterAssignments = $stageAssignmentDao->getBySubmissionAndRoleIds($submissionId, [Role::ROLE_ID_AUTHOR]);
         while ($assignment = $submitterAssignments->next()) {
             if ($currentUser->getId() == $assignment->getUserId()) {
                 $isAuthor = true;

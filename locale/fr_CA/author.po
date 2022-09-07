@@ -63,11 +63,6 @@ msgstr ""
 "supplémentaires</a>."
 
 #, fuzzy
-msgid "author.submit.form.sectionRequired"
-msgstr ""
-"Veuillez sélectionner une série du serveur appropriée pour cette soumission."
-
-#, fuzzy
 msgid "submission.submit.coverNote"
 msgstr "Commentaires pour le,la rédacteur-trice"
 
@@ -83,16 +78,8 @@ msgstr "Séries du serveur"
 msgid "author.submit.notAccepting"
 msgstr "Ce serveur n'accepte pas de soumissions pour le moment."
 
-msgid "submission.submit.cancelSubmission"
-msgstr ""
-"Vous pouvez compléter cette soumission ultérieurement en la sélectionnant "
-"dans le menu des soumissions actives de l'auteur-e."
-
 msgid "author.submit.nextSteps"
 msgstr "Étapes suivantes"
-
-msgid "author.submit.confirmation"
-msgstr "Confirmer"
 
 msgid "author.submit.metadata"
 msgstr "Saisir les métadonnées de la soumission"

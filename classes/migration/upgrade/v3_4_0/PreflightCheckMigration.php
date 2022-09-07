@@ -17,11 +17,16 @@ class PreflightCheckMigration extends \PKP\migration\upgrade\v3_4_0\PreflightChe
 {
     protected function getContextTable(): string
     {
-        return 'journals';
+        return 'servers';
     }
 
     protected function getContextKeyField(): string
     {
-        return 'journal_id';
+        return 'server_id';
+    }
+
+    protected function getContextSettingsTable(): string
+    {
+        return 'server_settings';
     }
 }

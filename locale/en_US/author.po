@@ -33,14 +33,8 @@ msgstr "Upload Submission"
 msgid "author.submit.metadata"
 msgstr "Enter Metadata"
 
-msgid "author.submit.confirmation"
-msgstr "Confirmation"
-
 msgid "author.submit.nextSteps"
 msgstr "Next Steps"
-
-msgid "submission.submit.cancelSubmission"
-msgstr "You can complete this submission at a later date by selecting Active Submissions from the Author home."
 
 msgid "author.submit.notAccepting"
 msgstr "This server is not accepting submissions at this time."
@@ -53,9 +47,6 @@ msgstr "Preprints must be submitted to one of the server's sections."
 
 msgid "submission.submit.coverNote"
 msgstr "Comments for the Moderator"
-
-msgid "author.submit.form.sectionRequired"
-msgstr "Please select an appropriate server section for this submission."
 
 msgid "author.submit.languageInstructions"
 msgstr ""

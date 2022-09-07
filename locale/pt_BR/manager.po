@@ -71,9 +71,6 @@ msgstr ""
 msgid "manager.setup.enableOai"
 msgstr "Habilitar OAI"
 
-msgid "manager.setup.submissionPreparationChecklist"
-msgstr "Lista de verificação de preparação de submissão"
-
 msgid "manager.setup.sponsoringOrganization"
 msgstr "Organização patrocinadora"
 
@@ -311,11 +308,6 @@ msgid "manager.sections.confirmDelete"
 msgstr "Está seguro de que deseja eliminar está serie de forma permanente?"
 
 #, fuzzy
-msgid "manager.section.noSectionEditors"
-msgstr ""
-"Não há editores de série. Adicione esta função ao menos a um usuário através "
-"da Administração > Configuração > Usuários &amp; Funções primeiro."
-
 msgid "manager.sections.abstractsNotRequired"
 msgstr "Não requer resumos"
 

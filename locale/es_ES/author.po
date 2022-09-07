@@ -47,10 +47,6 @@ msgstr ""
 "iso639-2/php/code_list.php\" target=\"_blank\">Códigos adicionales</a>."
 
 #, fuzzy
-msgid "author.submit.form.sectionRequired"
-msgstr "Seleccione una serie de servidores adecuada para este envío."
-
-#, fuzzy
 msgid "submission.submit.coverNote"
 msgstr "Comentarios para el Editor"
 
@@ -65,16 +61,8 @@ msgstr "Serie del servidor"
 msgid "author.submit.notAccepting"
 msgstr "Este servidor no acepta envíos en este momento."
 
-msgid "submission.submit.cancelSubmission"
-msgstr ""
-"Puede completar este envío en una fecha posterior seleccionando Envíos "
-"activos en la página principal del Autor."
-
 msgid "author.submit.nextSteps"
 msgstr "Próximos pasos"
-
-msgid "author.submit.confirmation"
-msgstr "Confirmación"
 
 msgid "author.submit.metadata"
 msgstr "Ingrese metadatos"
