@@ -242,6 +242,7 @@ msgstr "Адреса за отскокнување"
 msgid "manager.setup.disableUserRegistration"
 msgstr "Менаџерот за сервер ќе ги регистрира сите кориснички сметки."
 
+#, fuzzy
 msgid "manager.setup.authorScreening"
 msgstr "Приклучоци за скринирање на автори"
 

@@ -237,6 +237,7 @@ msgstr "Dirección de rebote"
 msgid "manager.setup.disableUserRegistration"
 msgstr "El Administrador del servidor registrará todas las cuentas de usuario."
 
+#, fuzzy
 msgid "manager.setup.authorScreening"
 msgstr "Complementos de selección del autor"
 

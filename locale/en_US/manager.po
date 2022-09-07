@@ -119,8 +119,9 @@ msgstr "Introduction"
 msgid "manager.setup.announcementsIntroduction.description"
 msgstr "Enter any information you would like to appear on your announcements page."
 
+#, fuzzy
 msgid "manager.setup.authorScreening"
-msgstr "Author screening plugins"
+msgstr "Author Screening"
 
 msgid "manager.setup.disableUserRegistration"
 msgstr "The Server Manager will register all user accounts."

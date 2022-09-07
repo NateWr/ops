@@ -428,6 +428,7 @@ msgstr "Bounce-Adresse"
 msgid "manager.setup.disableUserRegistration"
 msgstr "Der Server Manager wird alle Benutzerkonten registrieren."
 
+#, fuzzy
 msgid "manager.setup.authorScreening"
 msgstr "Autorenscreening-Plugins"
 
