@@ -30,7 +30,7 @@
 	<migration class="PKP\migration\install\SubmissionFilesMigration" />
 	<migration class="PKP\migration\install\RolesAndUserGroupsMigration" />
 	<migration class="PKP\migration\install\ScheduledTasksMigration" />
-	<migration class="PKP\migration\install\SubmissionsMigration" />
+	<migration class="APP\migration\install\SubmissionsMigration" />
 	<migration class="PKP\migration\install\ReviewsMigration" />
 	<migration class="PKP\migration\install\TemporaryFilesMigration" />
 	<migration class="PKP\migration\install\TombstoneMigration" />
