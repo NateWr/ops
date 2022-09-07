@@ -219,3 +219,9 @@ msgstr "Please select the license to apply to your preprint when it is posted."
 
 msgid "submission.licenseUrl.missing"
 msgstr "No license selected."
+
+msgid "submission.submit.complete.canPost"
+msgstr "Thank you for submitting your preprint. You can now <a href=\"{$workflowUrl}\">post your preprint</a> publicly."
+
+msgid "submission.submit.complete.canNotPost"
+msgstr "Thank you for submitting your preprint. The server has been notified of your submission and you have been emailed a confirmation for your records. Once the moderator has reviewed your submission, they will post your preprint or contact you."

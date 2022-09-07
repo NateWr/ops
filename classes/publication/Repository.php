@@ -267,11 +267,7 @@ class Repository extends \PKP\publication\Repository
 
         // By default authors can not publish, but this can be overridden in screening plugins with the hook Publication::canAuthorPublish
         if ($isAuthor) {
-            if (Hook::call('Publication::canAuthorPublish', [$this])) {
-                return true;
-            } else {
-                return false;
-            }
+            return (bool) Hook::call('Publication::canAuthorPublish', [$this]);
         }
 
         // If the user is not an author, has to be an editor, return true

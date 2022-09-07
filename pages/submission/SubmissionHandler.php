@@ -22,6 +22,7 @@ use APP\components\forms\submission\ReconfigureSubmission;
 use APP\components\forms\submission\StartSubmission;
 use APP\core\Application;
 use APP\core\Request;
+use APP\facades\Repo;
 use APP\publication\Publication;
 use APP\server\Section;
 use APP\submission\Submission;
@@ -36,9 +37,6 @@ use PKP\plugins\Hook;
 
 class SubmissionHandler extends PKPSubmissionHandler
 {
-    /**
-     * Display the screen to start a new submission
-     */
     protected function start(array $args, Request $request): void
     {
         $context = $request->getContext();
@@ -82,6 +80,16 @@ class SubmissionHandler extends PKPSubmissionHandler
         ]);
 
         parent::start($args, $request);
+    }
+
+    protected function complete(array $args, Request $request, Submission $submission): void
+    {
+        $templateMgr = TemplateManager::getManager($request);
+        $templateMgr->assign([
+            'canAuthorPublish' => Repo::publication()->canCurrentUserPublish($submission->getId()),
+        ]);
+
+        parent::complete($args, $request, $submission);
     }
 
     protected function getSubmittingTo(Context $context, Submission $submission, array $sections, LazyCollection $categories): string
