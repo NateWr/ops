@@ -15,9 +15,6 @@ namespace APP\publication;
 
 use APP\core\Application;
 use APP\facades\Repo;
-use APP\mail\PreprintMailTemplate;
-use APP\notification\Notification;
-use APP\notification\NotificationManager;
 use APP\submission\Submission;
 use Illuminate\Support\Facades\App;
 use PKP\core\Core;
@@ -28,6 +25,7 @@ use PKP\plugins\PluginRegistry;
 use PKP\publication\Collector;
 use PKP\security\Role;
 use PKP\stageAssignment\StageAssignmentDAO;
+use PKP\user\User;
 
 class Repository extends \PKP\publication\Repository
 {
@@ -100,18 +98,6 @@ class Repository extends \PKP\publication\Repository
         return $errors;
     }
 
-    /** @copydoc PKP\publication\Repository::validatePublish() */
-    public function validatePublish(Publication $publication, Submission $submission, array $allowedLocales, string $primaryLocale): array
-    {
-        $errors = parent::validatePublish($publication, $submission, $allowedLocales, $primaryLocale);
-
-        if (!$this->canCurrentUserPublish($submission->getId())) {
-            $errors['authorCheck'] = __('author.submit.authorsCanNotPublish');
-        }
-
-        return $errors;
-    }
-
     /** @copydoc \PKP\publication\Repository::add() */
     public function add(Publication $publication): int
     {
@@ -176,45 +162,6 @@ class Repository extends \PKP\publication\Repository
         }
     }
 
-    /** @copydoc \PKP\publication\Repository::publish() */
-    public function publish(Publication $publication)
-    {
-        parent::publish($publication);
-
-        // Send preprint posted acknowledgement email when the first version is published
-        if ($publication->getData('version') == 1) {
-            $submission = Repo::submission()->get($publication->getData('submissionId'));
-            $context = $this->request->getContext();
-            $dispatcher = $this->request->getDispatcher();
-            $mail = new PreprintMailTemplate($submission, 'POSTED_ACK', null, null, false);
-
-            if ($mail->isEnabled()) {
-
-                // posted ack emails should be from the contact.
-                $mail->setFrom($context->getData('contactEmail'), $context->getData('contactName'));
-
-                // Send to all authors
-                $assignedAuthors = Repo::author()->getSubmissionAuthors($submission);
-                foreach ($assignedAuthors as $author) {
-                    $mail->addRecipient($author->getEmail(), $author->getFullName());
-                }
-
-                // Use primary author details in email
-                $primaryAuthor = $submission->getPrimaryAuthor();
-                $mail->assignParams([
-                    'authorPrimary' => $primaryAuthor ? $primaryAuthor->getFullName() : '',
-                    'editorialContactSignature' => $context->getData('contactName'),
-                    'submissionUrl' => $dispatcher->url($this->request, Application::ROUTE_PAGE, $context->getData('urlPath'), 'preprint', 'view', $submission->getBestId(), null, null, true),
-                ]);
-
-                if (!$mail->send($this->request)) {
-                    $notificationMgr = new NotificationManager();
-                    $notificationMgr->createTrivialNotification($this->request->getUser()->getId(), Notification::NOTIFICATION_TYPE_ERROR, ['contents' => __('email.compose.error')]);
-                }
-            }
-        }
-    }
-
     /** @copydoc \PKP\publication\Repository::delete() */
     public function delete(Publication $publication)
     {
@@ -251,16 +198,14 @@ class Repository extends \PKP\publication\Repository
      *
      *
      */
-    public function canCurrentUserPublish(int $submissionId): bool
+    public function canUserPublish(int $submissionId, User $user): bool
     {
-
         // Check if current user is an author
         $isAuthor = false;
-        $currentUser = $this->request->getUser();
         $stageAssignmentDao = DAORegistry::getDAO('StageAssignmentDAO'); /** @var StageAssignmentDAO $stageAssignmentDao */
         $submitterAssignments = $stageAssignmentDao->getBySubmissionAndRoleIds($submissionId, [Role::ROLE_ID_AUTHOR]);
         while ($assignment = $submitterAssignments->next()) {
-            if ($currentUser->getId() == $assignment->getUserId()) {
+            if ($user->getId() == $assignment->getUserId()) {
                 $isAuthor = true;
             }
         }

@@ -89,8 +89,8 @@ class AuthorDashboardHandler extends PKPAuthorDashboardHandler
             'unpublishLabel' => __('publication.unpublish'),
         ]);
 
-        // If authors can publish show publish buttons
-        $canPublish = Repo::publication()->canCurrentUserPublish($submission->getId()) ? true : false;
+        // If current user can publish show publish buttons
+        $canPublish = Repo::publication()->canUserPublish($submission->getId(), $request->getUser()) ? true : false;
         $templateMgr->assign('canPublish', $canPublish);
     }
 

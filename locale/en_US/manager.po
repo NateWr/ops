@@ -641,3 +641,19 @@ msgstr "Only DOIs can be edited after a publication has been published"
 
 msgid "manager.institutions.noContext"
 msgstr "This institution's press could not be found."
+
+msgid "mailable.submissionAck.name"
+msgstr "Submission Acknowledgement (Pending Moderation)"
+
+msgid "mailable.submissionAck.description"
+msgstr ""
+"This email is automatically sent to an author when they "
+"make a submission and a moderator must approve it."
+
+msgid "mailable.submissionAckCanPost.name"
+msgstr "Submission Acknowledgement (No Moderation Required)"
+
+msgid "mailable.submissionAckCanPost.description"
+msgstr ""
+"This email is automatically sent to an author when they "
+"make a submission and no moderation is required. The author can post their preprint immediately."

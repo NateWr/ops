@@ -86,7 +86,7 @@ class SubmissionHandler extends PKPSubmissionHandler
     {
         $templateMgr = TemplateManager::getManager($request);
         $templateMgr->assign([
-            'canAuthorPublish' => Repo::publication()->canCurrentUserPublish($submission->getId()),
+            'canAuthorPublish' => Repo::publication()->canUserPublish($submission->getId(), $request->getUser()),
         ]);
 
         parent::complete($args, $request, $submission);
