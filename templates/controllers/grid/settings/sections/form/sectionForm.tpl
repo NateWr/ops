@@ -21,10 +21,6 @@
 
 	{include file="controllers/notification/inPlaceNotification.tpl" notificationId="sectionFormNotification"}
 
-	{if !$hasSubEditors}
-		<span class="pkp_form_error"><p>{translate key="manager.section.noSectionEditors"}</p></span>
-	{/if}
-
 	{fbvFormArea id="sectionInfo"}
 		{fbvFormSection}
 			{fbvElement type="text" multilingual=true id="title" label="section.title" value=$title maxlength="80" size=$fbvStyles.size.MEDIUM inline=true required=true}
