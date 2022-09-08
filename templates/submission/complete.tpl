@@ -16,7 +16,7 @@
 
     <div class="app__contentPanel">
 		<p>
-			{if $canAuthorPublish}
+			{if !$canAuthorPublish}
 				{translate key="submission.submit.complete.canNotPost"}</p>
 				<p>{translate key="submission.submit.whatNext.forNow"}</p>
 				<ul>
@@ -25,7 +25,7 @@
 					<li><a href={url page="submissions"}>{translate key="submission.submit.whatNext.return"}</a></li>
 				</ul>
 			{else}
-				{translate key="submission.submit.complete.canPost"}</p>
+				{translate key="submission.submit.complete.canPost" workflowUrl=$workflowUrl}</p>
 			{/if}
 		</p>
     </div>
