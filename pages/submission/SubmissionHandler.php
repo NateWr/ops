@@ -183,7 +183,7 @@ class SubmissionHandler extends PKPSubmissionHandler
 
         $templateMgr = TemplateManager::getManager($request);
         $templateMgr->setState([
-            'i18nRelationWithLink' => __('publication.relation.publishedWithLink'),
+            'i18nRelationWithLink' => __('publication.publish.relationStatus.published'),
             'licenses' => collect($licenseForm->licenseOptions)
                 ->mapWithKeys(fn ($license) => [$license['value'] => $license['label']])
                 ->toArray(),

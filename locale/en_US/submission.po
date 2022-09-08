@@ -100,9 +100,6 @@ msgstr "Preprint has been submitted for publication in a journal or other academ
 msgid "publication.relation.published"
 msgstr "Preprint has been published in a journal or other academic publication."
 
-msgid "publication.relation.publishedWithLink"
-msgstr "Preprint has been published in a journal or other academic publication and can be viewed at <a href=\"{$doi}\">{$doi}</a>."
-
 msgid "publication.relation.vorDoi"
 msgstr "DOI of the published preprint"
 
