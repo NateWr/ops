@@ -17,6 +17,15 @@ msgstr "The public identifier '{$publicIdentifier}' already exists for another o
 msgid "grid.action.addGalley"
 msgstr "Add galley"
 
+msgid "grid.action.editGalley"
+msgstr "Edit galley"
+
+msgid "grid.action.deleteGalley"
+msgstr "Delete galley"
+
+msgid "grid.action.confirmDeleteGalley"
+msgstr "Are you sure you want to delete the <b>{$name}</b> galley?"
+
 msgid "editor.submission.proof.manageProofFilesDescription"
 msgstr "Any files that have already been uploaded to any submission stage can be added to the Proofreading listing by checking the Include checkbox below and clicking Search: all available files will be listed and can be chosen for inclusion."
 

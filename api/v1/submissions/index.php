@@ -15,9 +15,17 @@
  * @brief Handle requests for submission API functions.
  *
  */
+
+use APP\API\v1\submissions\SubmissionHandler;
+use APP\core\Application;
+use PKP\API\v1\submissions\GalleysHandler;
+use PKP\API\v1\submissions\PKPSubmissionFileHandler;
+
 $requestPath = Application::get()->getRequest()->getRequestPath();
 if (strpos($requestPath, '/files')) {
-    return new \PKP\API\v1\submissions\PKPSubmissionFileHandler();
+    return new PKPSubmissionFileHandler();
+} elseif (strpos($requestPath, '/galleys')) {
+    return new GalleysHandler();
 } else {
-    return new \APP\API\v1\submissions\SubmissionHandler();
+    return new SubmissionHandler();
 }

@@ -15,6 +15,8 @@
 
 namespace APP\pages\workflow;
 
+use APP\components\forms\publication\IssueEntryForm;
+use APP\components\forms\publication\RelationForm;
 use APP\components\forms\publication\TitleAbstractForm;
 use APP\core\Application;
 use APP\core\Services;
@@ -26,6 +28,7 @@ use APP\publication\Publication;
 use APP\server\SectionDAO;
 use APP\submission\Submission;
 use APP\template\TemplateManager;
+use PKP\components\listPanels\GalleysListPanel;
 use PKP\context\Context;
 use PKP\db\DAORegistry;
 use PKP\pages\workflow\PKPWorkflowHandler;
@@ -80,12 +83,19 @@ class WorkflowHandler extends PKPWorkflowHandler
         $latestPublicationApiUrl = $request->getDispatcher()->url($request, Application::ROUTE_API, $submissionContext->getPath(), 'submissions/' . $submission->getId() . '/publications/' . $latestPublication->getId());
         $temporaryFileApiUrl = $request->getDispatcher()->url($request, Application::ROUTE_API, $submissionContext->getPath(), 'temporaryFiles');
         $relatePublicationApiUrl = $request->getDispatcher()->url($request, Application::ROUTE_API, $submissionContext->getPath(), 'submissions/' . $submission->getId() . '/publications/' . $latestPublication->getId()) . '/relate';
+        $galleysApiUrl = $request->getDispatcher()->url(
+            $request,
+            Application::ROUTE_API,
+            $submissionContext->getPath(),
+            'submissions/' . $submission->getId() . '/publications/__publicationId__/galleys'
+        );
 
         $publicFileManager = new PublicFileManager();
         $baseUrl = $request->getBaseUrl() . '/' . $publicFileManager->getContextFilesPath($submissionContext->getId());
 
-        $issueEntryForm = new \APP\components\forms\publication\IssueEntryForm($latestPublicationApiUrl, $locales, $latestPublication, $submissionContext, $baseUrl, $temporaryFileApiUrl);
-        $relationForm = new \APP\components\forms\publication\RelationForm($relatePublicationApiUrl, $latestPublication);
+        $issueEntryForm = new IssueEntryForm($latestPublicationApiUrl, $locales, $latestPublication, $submissionContext, $baseUrl, $temporaryFileApiUrl);
+        $relationForm = new RelationForm($relatePublicationApiUrl, $latestPublication);#
+        $galleysListPanel = new GalleysListPanel('galleys', __('submission.layout.galleys'), $submissionContext, $galleysApiUrl);
 
         import('classes.components.forms.publication.IssueEntryForm'); // Constant import
         import('classes.components.forms.publication.RelationForm'); // Constant import
@@ -116,6 +126,7 @@ class WorkflowHandler extends PKPWorkflowHandler
         }
         $components[FORM_ISSUE_ENTRY] = $issueEntryForm->getConfig();
         $components[FORM_ID_RELATION] = $relationForm->getConfig();
+        $components['galleys'] = $galleysListPanel->getConfig();
 
         $publicationFormIds = $templateMgr->getState('publicationFormIds');
         $publicationFormIds[] = FORM_ISSUE_ENTRY;

@@ -18,10 +18,10 @@ use APP\publication\Publication;
 
 use PKP\core\PKPApplication;
 use PKP\services\PKPSchemaService;
+use PKP\submissionFile\SubmissionFile;
 
 class Schema extends \PKP\publication\maps\Schema
 {
-    /** @copydoc \PKP\publication\maps\Schema::mapByProperties() */
     protected function mapByProperties(array $props, Publication $publication, bool $anonymize): array
     {
         $output = parent::mapByProperties($props, $publication, $anonymize);
@@ -30,7 +30,13 @@ class Schema extends \PKP\publication\maps\Schema
             if ($anonymize) {
                 $output['galleys'] = [];
             } else {
-                $output['galleys'] = Repo::galley()->getSchemaMap($this->submission, $publication, $this->genres)
+                $submissionFiles = Repo::submissionFile()
+                    ->getCollector()
+                    ->filterBySubmissionIds([$this->submission->getId()])
+                    ->filterByFileStages([SubmissionFile::SUBMISSION_FILE_PROOF])
+                    ->getMany();
+                $output['galleys'] = Repo::galley()
+                    ->getSchemaMap($this->submission, $publication, $submissionFiles, $this->genres)
                     ->summarizeMany($publication->getData('galleys'));
             }
         }

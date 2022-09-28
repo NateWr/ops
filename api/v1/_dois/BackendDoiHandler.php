@@ -14,11 +14,12 @@
  */
 
 namespace APP\API\v1\_dois;
- 
+
 use APP\facades\Repo;
 use PKP\core\APIResponse;
 use PKP\db\DAORegistry;
 use PKP\security\Role;
+use PKP\submissionFile\SubmissionFile;
 use Slim\Http\Request as SlimRequest;
 
 class BackendDoiHandler extends \PKP\API\v1\_dois\PKPBackendDoiHandler
@@ -78,7 +79,13 @@ class BackendDoiHandler extends \PKP\API\v1\_dois\PKPBackendDoiHandler
         $submission = Repo::submission()->get((int)$submissionId);
         $galley = Repo::galley()->get($galley->getId());
 
-        $galleyProps = Repo::galley()->getSchemaMap($submission, $publication, $genres)->map($galley);
+        $submissionFiles = Repo::submissionFile()
+            ->getCollector()
+            ->filterBySubmissionIds([$submission->getId()])
+            ->filterByFileStages([SubmissionFile::SUBMISSION_FILE_PROOF])
+            ->getMany();
+
+        $galleyProps = Repo::galley()->getSchemaMap($submission, $publication, $submissionFiles, $genres)->map($galley);
 
         return $response->withJson($galleyProps, 200);
     }

@@ -176,11 +176,11 @@
 						<tab id="contributors" label="{translate key="publication.contributors"}">
 							<contributors-list-panel
 								v-bind="components.contributors"
-								class="pkpWorkflow__contributors"
-								@set="set"
+								class="pkpWorkflow__listPanelInTab"
 								:items="workingPublication.authors"
 								:publication="workingPublication"
 								:publication-api-url="submissionApiUrl + '/publications/' + workingPublication.id"
+								@set="set"
 								@updated:publication="setWorkingPublication"
 								@updated:contributors="setContributors"
 							></contributors-list-panel>
@@ -200,9 +200,16 @@
 						{/if}
 						{if $canAccessProduction}
 							<tab id="galleys" label="{translate key="submission.layout.galleys"}">
-								<div id="representations-grid" ref="representations">
-									<spinner></spinner>
-								</div>
+								<galleys-list-panel
+									v-bind="components.galleys"
+									:api-url="workingPublication._href + '/galleys'"
+									class="pkpWorkflow__listPanelInTab"
+									:galleys="workingPublication.galleys"
+									:publication-id="workingPublication.id"
+									@update:galleys="updateGalleys"
+								>
+									<h2 slot="title">{translate key="submission.layout.galleys"}</h2>
+								</galleys-list-panel>
 							</tab>
 							<tab id="license" label="{translate key="publication.publicationLicense"}">
 								<pkp-form v-bind="components.{$smarty.const.FORM_PUBLICATION_LICENSE}" @set="set" />
