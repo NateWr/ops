@@ -20,10 +20,12 @@ import DecisionPage from '@/components/Container/DecisionPage.vue';
 import DoiPage from '@/components/Container/DoiPageOPS.vue';
 import ImportExportPage from '@/components/Container/ImportExportPage.vue';
 import SettingsPage from '@/components/Container/SettingsPage.vue';
+import StartSubmissionPage from '@/components/Container/StartSubmissionPage.vue';
 import StatsEditorialPage from '@/components/Container/StatsEditorialPage.vue';
 import StatsPublicationsPage from '@/components/Container/StatsPublicationsPage.vue';
 import StatsContextPage from '@/components/Container/StatsContextPage.vue';
 import StatsUsersPage from '@/components/Container/StatsUsersPage.vue';
+import SubmissionWizardPage from '@/components/Container/SubmissionWizardPageOPS.vue';
 import WorkflowPage from '@/components/Container/WorkflowPageOPS.vue';
 import JobsPage from '@/components/Container/JobsPage.vue';
 
@@ -43,10 +45,12 @@ window.pkp = Object.assign(PkpLoad, {
 		ImportExportPage,
 		JobsPage,
 		SettingsPage,
+		StartSubmissionPage,
 		StatsEditorialPage,
 		StatsPublicationsPage,
 		StatsContextPage,
 		StatsUsersPage,
+		SubmissionWizardPage,
 		WorkflowPage
 	}
 });

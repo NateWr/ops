@@ -15,20 +15,18 @@ namespace APP\publication;
 
 use APP\core\Application;
 use APP\facades\Repo;
-use APP\notification\Notification;
-use APP\notification\NotificationManager;
 use APP\submission\Submission;
-use Exception;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
+use PKP\context\Context;
 use PKP\core\Core;
+use PKP\core\PKPString;
 use PKP\db\DAORegistry;
-use PKP\mail\Mailable;
 use PKP\plugins\Hook;
 use PKP\plugins\PluginRegistry;
 use PKP\publication\Collector;
 use PKP\security\Role;
 use PKP\stageAssignment\StageAssignmentDAO;
+use PKP\user\User;
 
 class Repository extends \PKP\publication\Repository
 {
@@ -41,10 +39,12 @@ class Repository extends \PKP\publication\Repository
     }
 
     /** @copydoc PKP\publication\Repository::validate() */
-    public function validate($publication, array $props, array $allowedLocales, string $primaryLocale): array
+    public function validate($publication, array $props, Submission $submission, Context $context): array
     {
-        $errors = parent::validate($publication, $props, $allowedLocales, $primaryLocale);
+        $errors = parent::validate($publication, $props, $submission, $context);
 
+        $allowedLocales = $context->getSupportedSubmissionLocales();
+        $primaryLocale = $submission->getLocale();
         $sectionDao = Application::get()->getSectionDAO(); /** @var SectionDAO $sectionDao */
 
         // Ensure that the specified section exists
@@ -61,7 +61,8 @@ class Repository extends \PKP\publication\Repository
             $section = $sectionDao->getById($publication->getData('sectionId'));
         }
 
-        if ($section) {
+        // Only validate section settings for completed submissions
+        if ($section && !$submission->getData('submissionProgress')) {
 
             // Require abstracts if the section requires them
             if (is_null($publication) && !$section->getData('abstractsNotRequired') && empty($props['abstract'])) {
@@ -85,7 +86,7 @@ class Repository extends \PKP\publication\Repository
                     if (empty($props['abstract'][$localeKey])) {
                         continue;
                     }
-                    $wordCount = count(preg_split('/\s+/', trim(str_replace('&nbsp;', ' ', strip_tags($props['abstract'][$localeKey])))));
+                    $wordCount = PKPString::getWordCount($props['abstract'][$localeKey]);
                     $wordCountLimit = $section->getData('wordCount');
                     if ($wordCountLimit && $wordCount > $wordCountLimit) {
                         if (!isset($errors['abstract'])) {
@@ -95,18 +96,6 @@ class Repository extends \PKP\publication\Repository
                     }
                 }
             }
-        }
-
-        return $errors;
-    }
-
-    /** @copydoc PKP\publication\Repository::validatePublish() */
-    public function validatePublish(Publication $publication, Submission $submission, array $allowedLocales, string $primaryLocale): array
-    {
-        $errors = parent::validatePublish($publication, $submission, $allowedLocales, $primaryLocale);
-
-        if (!$this->canCurrentUserPublish($submission->getId())) {
-            $errors['authorCheck'] = __('author.submit.authorsCanNotPublish');
         }
 
         return $errors;
@@ -159,6 +148,17 @@ class Repository extends \PKP\publication\Repository
         return $newId;
     }
 
+    public function validatePublish(Publication $publication, Submission $submission, array $allowedLocales, string $primaryLocale): array
+    {
+        $errors = $this->validatePublish($publication, $submission, $allowedLocales, $primaryLocale);
+
+        if (!$this->canCurrentUserPublish($submission->getId())) {
+            $errors['authorCheck'] = __('author.submit.authorsCanNotPublish');
+        }
+
+        return $errors;
+    }
+
     /** @copydoc \PKP\publication\Repository::setStatusOnPublish() */
     protected function setStatusOnPublish(Publication $publication)
     {
@@ -173,50 +173,6 @@ class Repository extends \PKP\publication\Repository
         // If there is no publish date, set it
         if (!$publication->getData('datePublished')) {
             $publication->setData('datePublished', Core::getCurrentDate());
-        }
-    }
-
-    /** @copydoc \PKP\publication\Repository::publish() */
-    public function publish(Publication $publication)
-    {
-        parent::publish($publication);
-
-        // Send preprint posted acknowledgement email when the first version is published
-        if ($publication->getData('version') == 1) {
-            $submission = Repo::submission()->get($publication->getData('submissionId'));
-            $context = $this->request->getContext();
-            $dispatcher = $this->request->getDispatcher();
-
-            // FIXME actual mailable should be created as part of pkp/pkp-lib7191 and replace the generic one
-            $emailTemplate = Repo::emailTemplate()->getByKey($context->getId(), 'POSTED_ACK');
-            if ($emailTemplate->getData('enabled')) {
-
-                // posted ack emails should be from the contact.
-                $mailable = new Mailable([$context, $submission]);
-                $assignedAuthors = Repo::author()->getSubmissionAuthors($submission);
-                $mailable
-                    ->from($context->getData('contactEmail'), $context->getData('contactName'))
-                    ->to($assignedAuthors->toArray()); // Send to all authors
-
-                $primaryAuthor = $submission->getPrimaryAuthor(); // Use primary author details in email
-                $mailable->addData([
-                    'authorPrimary' => $primaryAuthor ? $primaryAuthor->getFullName() : '',
-                    'editorialContactSignature' => $context->getData('contactName'),
-                    'submissionUrl' => $dispatcher->url($this->request, Application::ROUTE_PAGE, $context->getData('urlPath')),
-                ]);
-
-                try {
-                    Mail::send($mailable);
-                } catch (Exception $e) {
-                    $notificationMgr = new NotificationManager();
-                    $notificationMgr->createTrivialNotification(
-                        $this->request->getUser()->getId(),
-                        Notification::NOTIFICATION_TYPE_ERROR,
-                        ['contents' => __('email.compose.error')]
-                    );
-                    error_log($e->getMessage());
-                }
-            }
         }
     }
 
@@ -250,33 +206,34 @@ class Repository extends \PKP\publication\Repository
     }
 
     /**
-     * Check if the current user can publish
+     * Check if the current user can publish this submission
      *
-     * @param string $submissionId
+     * Do not use this as a general authorization check. This does not
+     * check whether the current user is actually assigned to the
+     * submission in a role that is allowed to publish. It is only used
+     * in a few places to see if the current user is an author who can
+     * publish, based on automated moderation tools that use the hook
+     * Publication::canAuthorPublish.
      *
-     *
+     * @deprecated 3.4
      */
-    public function canCurrentUserPublish(int $submissionId): bool
+    public function canCurrentUserPublish(int $submissionId, ?User $user = null): bool
     {
+        $user = $user ?? Application::get()->getRequest()->getUser();
 
         // Check if current user is an author
         $isAuthor = false;
-        $currentUser = $this->request->getUser();
         $stageAssignmentDao = DAORegistry::getDAO('StageAssignmentDAO'); /** @var StageAssignmentDAO $stageAssignmentDao */
-        $submitterAssignments = $stageAssignmentDao->getBySubmissionAndRoleId($submissionId, Role::ROLE_ID_AUTHOR);
+        $submitterAssignments = $stageAssignmentDao->getBySubmissionAndRoleIds($submissionId, [Role::ROLE_ID_AUTHOR]);
         while ($assignment = $submitterAssignments->next()) {
-            if ($currentUser->getId() == $assignment->getUserId()) {
+            if ($user->getId() == $assignment->getUserId()) {
                 $isAuthor = true;
             }
         }
 
         // By default authors can not publish, but this can be overridden in screening plugins with the hook Publication::canAuthorPublish
         if ($isAuthor) {
-            if (Hook::call('Publication::canAuthorPublish', [$this])) {
-                return true;
-            } else {
-                return false;
-            }
+            return (bool) Hook::call('Publication::canAuthorPublish', [$this]);
         }
 
         // If the user is not an author, has to be an editor, return true

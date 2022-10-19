@@ -18,7 +18,9 @@
 	<email key="USER_VALIDATE_CONTEXT" subject="emails.userValidateContext.subject" body="emails.userValidateContext.body"/>
 	<email key="USER_VALIDATE_SITE" subject="emails.userValidateSite.subject" body="emails.userValidateSite.body"/>
 	<email key="SUBMISSION_ACK" subject="emails.submissionAck.subject" body="emails.submissionAck.body"/>
-	<email key="POSTED_ACK" can_disable="1" to_role_id="65536" stage_id="5" subject="emails.postedAck.subject" description="emails.postedAck.description" body="emails.postedAck.body"/>
+	<email key="SUBMISSION_ACK_CAN_POST" subject="emails.submissionAck.subject" body="emails.submissionAckCanPost.body"/>
+	<email key="POSTED_ACK" subject="emails.postedAck.subject" description="emails.postedAck.description" body="emails.postedAck.body"/>
+	<email key="POSTED_NEW_VERSION_ACK" subject="emails.postedNewVersionAck.subject" description="emails.postedNewVersionAck.description" body="emails.postedNewVersionAck.body"/>
 	<email key="SUBMISSION_ACK_NOT_USER" subject="emails.submissionAckNotUser.subject" body="emails.submissionAckNotUser.body"/>
 	<email key="EDITOR_ASSIGN" subject="emails.editorAssign.subject" body="emails.editorAssign.body"/>
 	<email key="EDITOR_DECISION_ACCEPT" subject="emails.editorDecisionAccept.subject" body="emails.editorDecisionAccept.body"/>
@@ -28,4 +30,6 @@
 	<email key="STATISTICS_REPORT_NOTIFICATION" subject="emails.statisticsReportNotification.subject" body="emails.statisticsReportNotification.subject"/>
 	<email key="ANNOUNCEMENT" subject="emails.announcement.subject" body="emails.announcement.body"/>
 	<email key="DISCUSSION_NOTIFICATION" subject="discussion.notification.subject" body="discussion.notification.body"/>
+	<email key="SUBMISSION_SAVED_FOR_LATER" subject="emails.submissionSavedForLater.subject" body="emails.submissionSavedForLater.body"/>
+	<email key="SUBMISSION_NEEDS_EDITOR" subject="emails.submissionNeedsEditor.subject" body="emails.submissionNeedsEditor.body"/>
 </emails>

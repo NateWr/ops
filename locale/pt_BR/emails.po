@@ -102,9 +102,10 @@ msgstr ""
 msgid "emails.notification.subject"
 msgstr "Nova notificação de {$siteTitle}"
 
+#, fuzzy
 msgid "emails.postedAck.body"
 msgstr ""
-"{$authorPrimary}: <br />\n"
+"{$recipientName}: <br />\n"
 "<br />\n"
 "Seu preprint, &quot;{$submissionTitle}&quot; foi publicado online em "
 "{$contextName}. <br />\n"
