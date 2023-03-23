@@ -46,7 +46,7 @@ msgstr "Немате дозвола да го избришете овој сер
 msgid "api.contexts.404.contextNotFound"
 msgstr "Серверот што го баравте не беше пронајден."
 
-msgid "api.dois.400.contextsNotMatched"
+msgid "api.dois.403.contextsNotMatched"
 msgstr "Побараното DOI не се наоѓа на овој сервер."
 
 msgid "api.dois.400.noRegistrationAgencyConfigured"

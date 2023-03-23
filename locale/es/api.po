@@ -44,7 +44,7 @@ msgstr "No tiene permiso para eliminar este servidor."
 msgid "api.contexts.404.contextNotFound"
 msgstr "No se encontró el servidor que solicitó."
 
-msgid "api.dois.400.contextsNotMatched"
+msgid "api.dois.403.contextsNotMatched"
 msgstr ""
 
 msgid "api.dois.400.noRegistrationAgencyConfigured"

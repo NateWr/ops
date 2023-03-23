@@ -32,7 +32,7 @@ msgstr "Нямате права да изтриете този сървър."
 msgid "api.contexts.404.contextNotFound"
 msgstr "Сървърът, който поискахте, не беше намерен."
 
-msgid "api.dois.400.contextsNotMatched"
+msgid "api.dois.403.contextsNotMatched"
 msgstr "DOI, който поискахте, не е част от този сървър."
 
 msgid "api.emails.403.disabled"

@@ -43,7 +43,7 @@ msgstr "Anda tidak punya izin untuk menghapus server ini."
 msgid "api.contexts.404.contextNotFound"
 msgstr "Server yang diminta tidak ditemukan."
 
-msgid "api.dois.400.contextsNotMatched"
+msgid "api.dois.403.contextsNotMatched"
 msgstr ""
 
 msgid "api.dois.400.noRegistrationAgencyConfigured"

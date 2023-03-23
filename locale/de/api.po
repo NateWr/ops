@@ -45,7 +45,7 @@ msgstr "Sie haben nicht die Erlaubnis, diesen Server zu löschen."
 msgid "api.contexts.404.contextNotFound"
 msgstr "Der von Ihnen angeforderte Server wurde nicht gefunden."
 
-msgid "api.dois.400.contextsNotMatched"
+msgid "api.dois.403.contextsNotMatched"
 msgstr ""
 
 msgid "api.dois.400.noRegistrationAgencyConfigured"
